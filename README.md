@@ -75,7 +75,7 @@ http://localhost:3000
 
 ## Project Structure
 
-
+<pre>
 gpa-calculator/
 ├── app/
 │   ├── layout.jsx          # Root layout
@@ -95,6 +95,7 @@ gpa-calculator/
 ├── next.config.js
 ├── jsconfig.json
 └── README.md
+</pre>
 
 
 ## How GPA Is Calculated
