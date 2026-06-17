@@ -1,22 +1,38 @@
 # GPA Calculator
 
-A responsive web app to track your semester GPA (SGPA) and overall GPA (OGPA).
-Built with Next.js 14. Data is saved in the browser using localStorage, so no backend is required.
+A responsive web app to track semester GPA (SGPA) and overall GPA (OGPA).
+Built with **Next.js 14** and stores data in the browser using **localStorage**, so no backend is required.
+
+## Live Demo
+
+[View Live App](https://gpa-calculater-pi.vercel.app)
 
 ## Screenshot
 
-![GPA Calculator Dashboard]()
+![GPA Calculator Dashboard](./1780254468905.jpg)
 
 ## Features
 
-* Add, rename, expand, and delete semesters
+* Add new semesters
+* Rename semesters
+* Expand and collapse semester sections
+* Delete semesters
 * Add modules with module name, credit value, and grade
+* Delete modules
 * Automatically calculate SGPA for each semester
-* Automatically calculate OGPA across all semesters
-* Display total modules and total credits
-* Built-in grading scale reference table
-* Responsive dark dashboard UI
+* Automatically calculate overall GPA / OGPA
+* Display total semesters, modules, and credits
+* Built-in grading reference table
+* Responsive dark dashboard interface
 * Data saved locally in the browser using localStorage
+
+## Tech Stack
+
+* Next.js 14
+* React
+* JavaScript
+* CSS
+* localStorage
 
 ## Grading Scale
 
@@ -36,14 +52,24 @@ Built with Next.js 14. Data is saved in the browser using localStorage, so no ba
 
 ## Getting Started
 
+Follow these steps to run the project locally.
 
-# 1. Install dependencies
+
+# 1. Clone the repository
+git clone https://github.com/GimhaniDilmika/gpa-calculater.git
+
+# 2. Go into the project folder
+cd gpa-calculater
+
+# 3. Install dependencies
 npm install
 
-# 2. Run the development server
+# 4. Run the development server
 npm run dev
 
-# 3. Open the app
+
+Open the app in your browser:
+
 http://localhost:3000
 
 
@@ -56,32 +82,89 @@ gpa-calculator/
 │   ├── page.jsx            # Main page
 │   └── globals.css         # Global styles
 ├── components/
-│   ├── StatsBar.jsx        # OGPA / modules / credits summary
-│   ├── SemesterCard.jsx    # Per-semester card with module table
-│   ├── AddModuleForm.jsx   # Form to add a module
+│   ├── StatsBar.jsx        # OGPA, semester, module, and credit summary
+│   ├── SemesterCard.jsx    # Semester card with module table
+│   ├── AddModuleForm.jsx   # Form to add module details
 │   └── GradeReference.jsx  # Collapsible grading scale table
 ├── lib/
-│   ├── gpaCalculator.js    # SGPA / OGPA formulas + grade data
-│   └── useGPA.js           # React hook for state + localStorage
-├── screenshots/
-│   └── gpa-calculator-dashboard.jpg
+│   ├── gpaCalculator.js    # SGPA / OGPA calculation logic and grade data
+│   └── useGPA.js           # React hook for state management and localStorage
+├── 1780254468905.jpg       # App screenshot
 ├── package.json
+├── package-lock.json
 ├── next.config.js
-└── jsconfig.json
+├── jsconfig.json
+└── README.md
+
+
+## How GPA Is Calculated
+
+The app calculates GPA using credit-weighted grade points.
+
+SGPA = Total weighted grade points for one semester / Total credits in that semester
+
+
+
+OGPA = Total weighted grade points for all semesters / Total credits for all semesters
+
+
+Example:
+
+
+Module 1: 3 credits × 4.00 = 12.00
+Module 2: 3 credits × 3.00 = 9.00
+
+Total weighted points = 21.00
+Total credits = 6
+
+SGPA = 21.00 / 6 = 3.50
 
 
 ## Customising the Grading Scale
 
-Edit `lib/gpaCalculator.js` and update `GRADE_POINTS` and `GRADE_DESCRIPTIONS` to match your university's grading scale. The SGPA, OGPA, and colour coding will update automatically.
+To change the grading scale, edit this file:
+
+
+lib/gpaCalculator.js
+
+
+Update these objects:
+
+
+GRADE_POINTS
+GRADE_DESCRIPTIONS
+
+
+After changing them, SGPA, OGPA, grade labels, and colour coding will update automatically.
 
 ## Deployment
 
-Build the project:
+To build the project:
 
 
 npm run build
+
+
+To start the production server:
+
+
 npm run start
 
 
-You can also deploy this project to Vercel by pushing the project to GitHub and importing the repository into Vercel.
-a5555555555555
+You can also deploy this project using Vercel.
+
+Steps:
+
+1. Push the project to GitHub.
+2. Go to Vercel.
+3. Import the GitHub repository.
+4. Click Deploy.
+
+## Repository
+
+GitHub Repository:
+https://github.com/GimhaniDilmika/gpa-calculater.git
+
+## Author
+
+Developed by **GimhaniDilmika**.
