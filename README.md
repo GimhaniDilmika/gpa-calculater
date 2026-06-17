@@ -5,11 +5,11 @@ Built with **Next.js 14** and stores data in the browser using **localStorage**,
 
 ## Live Demo
 
-[View Live App](https://gpa-calculater-pi.vercel.app)
+Live Demo-gpa-calculater-pi.vercel.app
 
 ## Screenshot
 
-![GPA Calculator Dashboard](./1780254468905.jpg)
+![GPA Calculator Dashboard](./image.png)
 
 ## Features
 
