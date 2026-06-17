@@ -1,100 +1,147 @@
 "use client";
-import { useRef } from "react";
+
 import { useGPA } from "@/lib/useGPA";
 import StatsBar from "@/components/StatsBar";
 import SemesterCard from "@/components/SemesterCard";
 import GradeReference from "@/components/GradeReference";
-import Sidebar from "@/components/Sidebar";
 
 export default function HomePage() {
   const {
-    semesters, loaded, ogpa, totalModules, totalCredits,
-    addSemester, deleteSemester, renameSemester,
-    toggleSemester, addModule, deleteModule, calcSGPA,
+    semesters,
+    loaded,
+    ogpa,
+    totalModules,
+    totalCredits,
+    addSemester,
+    deleteSemester,
+    renameSemester,
+    toggleSemester,
+    addModule,
+    deleteModule,
+    calcSGPA,
   } = useGPA();
-  const semRefs = useRef({});
 
-  function scrollTo(id) {
-    semRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (!loaded) {
+    return (
+      <main className="page-shell">
+        <div className="loading-state">Loading your GPA dashboard...</div>
+      </main>
+    );
   }
 
-  if (!loaded) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: 32, marginBottom: 12 }}>⟳</div>
-        <p style={{ color: "var(--text3)" }}>Loading your data…</p>
-      </div>
-    </div>
-  );
+  const semesterCount = semesters.length;
+
+  const scrollToSemester = (id) => {
+    const element = document.getElementById(`semester-${id}`);
+    if (element) element.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
-      <nav style={{
-        borderBottom: "1px solid var(--border)",
-        background: "rgba(10,10,15,0.9)",
-        backdropFilter: "blur(12px)",
-        position: "sticky", top: 0, zIndex: 100,
-      }}>
-        <div className="nav-inner">
-          <div className="nav-brand">
-            <div style={{
-              width: 28, height: 28, borderRadius: 8,
-              background: "linear-gradient(135deg, var(--accent), #a78bfa)",
-              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
-            }}>📊</div>
-            <span style={{ fontSize: 15, fontWeight: 700 }}>GPA Tracker</span>
-          </div>
-          <div className="nav-actions">
-            <span className="nav-badge">{semesters.length} semester{semesters.length !== 1 ? "s" : ""}</span>
-            <button className="btn-primary" onClick={() => addSemester()}>+ New Semester</button>
+    <main className="page-shell">
+      <div className="app-topbar">
+        <div className="brand-block">
+          <div className="brand-logo">🎓</div>
+          <div>
+            <h1 className="brand-title">GPA Tracker</h1>
+            <p className="brand-subtitle">Smart academic performance dashboard</p>
           </div>
         </div>
-      </nav>
 
-      <div className="page-layout">
-        <div className="page-main">
-          <div style={{ marginBottom: "1.75rem" }}>
-            <h1 className="page-title">Academic Dashboard</h1>
-            <p className="page-subtitle">Track your modules, SGPA per semester, and cumulative OGPA.</p>
-          </div>
+        <div className="topbar-actions">
+          <span className="pill-badge">{semesterCount} Semester{semesterCount !== 1 ? "s" : ""}</span>
+          <button className="primary-btn" onClick={() => addSemester()}>
+            + New Semester
+          </button>
+        </div>
+      </div>
 
-          <StatsBar ogpa={ogpa} totalModules={totalModules} totalCredits={totalCredits} semesterCount={semesters.length} />
+      <section className="hero-section">
+        <div>
+          <h2 className="hero-title">Academic Dashboard</h2>
+          <p className="hero-description">
+            Track your modules, SGPA per semester, and cumulative OGPA in one clean view.
+          </p>
+        </div>
+      </section>
+
+      <div className="dashboard-grid">
+        <div className="dashboard-main">
+          <StatsBar
+            ogpa={ogpa}
+            totalModules={totalModules}
+            totalCredits={totalCredits}
+            semesterCount={semesterCount}
+          />
+
           <GradeReference />
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>Semesters</h2>
-            {semesters.length > 0 && <span style={{ fontSize: 12, color: "var(--text3)" }}>Tap to expand</span>}
+          <div className="section-head">
+            <h3 className="section-title">Semesters</h3>
+            <p className="section-hint">Click a semester to expand or collapse</p>
           </div>
 
           {semesters.length === 0 ? (
-            <div className="empty-state">
-              <div style={{ fontSize: 40, marginBottom: 12 }}>🎓</div>
-              <p style={{ fontSize: 16, fontWeight: 600, color: "var(--text2)", marginBottom: 6 }}>No semesters yet</p>
-              <p style={{ fontSize: 13, color: "var(--text3)", marginBottom: 20 }}>Add your first semester to start tracking your GPA.</p>
-              <button className="btn-primary" style={{ padding: "10px 24px", fontSize: 14 }} onClick={() => addSemester()}>
-                + Add First Semester
+            <div className="empty-card">
+              <div className="empty-icon">📘</div>
+              <h4>No semesters yet</h4>
+              <p>Add your first semester to start tracking GPA, modules, and credits.</p>
+              <button className="primary-btn" onClick={() => addSemester()}>
+                Add First Semester
               </button>
             </div>
           ) : (
-            semesters.map(sem => (
-              <div key={sem.id} ref={el => semRefs.current[sem.id] = el}>
+            <div className="semester-stack">
+              {semesters.map((sem, index) => (
                 <SemesterCard
-                  semester={sem} sgpa={calcSGPA(sem.modules)}
-                  onToggle={toggleSemester} onDelete={deleteSemester}
-                  onRename={renameSemester} onAddModule={addModule} onDeleteModule={deleteModule}
+                  key={sem.id}
+                  semester={sem}
+                  semesterNumber={index + 1}
+                  sgpa={calcSGPA(sem.modules)}
+                  onToggle={toggleSemester}
+                  onDelete={deleteSemester}
+                  onRename={renameSemester}
+                  onAddModule={addModule}
+                  onDeleteModule={deleteModule}
                 />
-              </div>
-            ))
+              ))}
+            </div>
           )}
-        </div>
-        <Sidebar semesters={semesters} ogpa={ogpa} onScrollTo={scrollTo} />
-      </div>
 
-      <footer style={{ borderTop: "1px solid var(--border)", padding: "1.5rem", textAlign: "center", marginTop: "2rem" }}>
-        <p style={{ fontSize: 12, color: "var(--text3)" }}>
-          Data saved locally in your browser · Built with Next.js · <span style={{ color: "var(--accent)" }}>GPA Tracker</span>
-        </p>
-      </footer>
-    </div>
+          <p className="app-footer">Your data is saved in your browser · Built with Next.js</p>
+        </div>
+
+        <aside className="dashboard-side">
+          <div className="side-card">
+            <p className="side-label">Quick Nav</p>
+
+            {semesters.length === 0 ? (
+              <p className="side-empty">Semester links will appear here.</p>
+            ) : (
+              <div className="quick-list">
+                {semesters.map((sem, index) => {
+                  const sgpa = calcSGPA(sem.modules);
+                  return (
+                    <button
+                      key={sem.id}
+                      className="quick-item"
+                      onClick={() => scrollToSemester(sem.id)}
+                    >
+                      <span>{sem.name || `Semester ${index + 1}`}</span>
+                      <strong>{sgpa !== null ? sgpa.toFixed(2) : "—"}</strong>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="ogpa-summary">
+              <span>OGPA</span>
+              <strong>{ogpa !== null ? ogpa.toFixed(2) : "—"}</strong>
+              <small>{ogpa !== null && ogpa >= 2.0 ? "Pass" : ogpa === null ? "No data" : "Needs improvement"}</small>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
   );
 }
