@@ -5,7 +5,7 @@ Built with Next.js 14. Data is saved in the browser using localStorage, so no ba
 
 ## Screenshot
 
-![GPA Calculator Dashboard](screenshots/gpa-calculator-dashboard.jpg)
+![GPA Calculator Dashboard]()
 
 ## Features
 
